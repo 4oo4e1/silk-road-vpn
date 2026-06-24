@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>جاده ابریشم</title>
+
+  <!-- Telegram WebApp SDK — must load before app code -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- Boot / loading -->
+  <div id="boot" class="boot">
+    <div class="boot__spinner" aria-hidden="true"></div>
+    <p class="boot__text">در حال بارگذاری…</p>
+  </div>
+
+  <!-- App -->
+  <main id="app" class="app" hidden></main>
+
+  <!-- Bottom navigation -->
+  <nav id="nav" class="bottom-nav" hidden>
+    <button class="nav-btn" data-action="nav" data-page="home"><span class="ico">🏠</span>خانه</button>
+    <button class="nav-btn" data-action="nav" data-page="buy"><span class="ico">🛒</span>خرید</button>
+    <button class="nav-btn" data-action="nav" data-page="services"><span class="ico">📦</span>سرویس‌ها</button>
+    <button class="nav-btn" data-action="nav" data-page="wallet"><span class="ico">💳</span>کیف پول</button>
+    <button class="nav-btn" data-action="nav" data-page="support"><span class="ico">🎫</span>پشتیبانی</button>
+  </nav>
+
+  <!-- Modal + toast roots -->
+  <div id="modal-root"></div>
+  <div id="toast-root"></div>
+
+  <script>
+    (function () {
+      var tg = window.Telegram && window.Telegram.WebApp;
+      if (!tg) return;
+      tg.ready();
+      tg.expand();
+      document.documentElement.dataset.scheme = tg.colorScheme || 'light';
+      tg.onEvent('themeChanged', function () {
+        document.documentElement.dataset.scheme = tg.colorScheme || 'light';
+      });
+    })();
+  </script>
+  <script src="/api.js"></script>
+  <script src="/app.js" defer></script>
+</body>
+</html>
