@@ -1,9 +1,12 @@
 -- ════════════════════════════════════════════════════════════
---  جاده ابریشم (Silk Road VPN) — Database Schema
+--  Silk Road VPN — Database Schema
 --  Cloudflare D1 (SQLite)
 --
---  Run:
---    wrangler d1 execute silk-road-db --remote --file=schema.sql
+--  Apply the schema (use the database name from your wrangler.toml):
+--    wrangler d1 execute YOUR_DB_NAME --remote --file=schema.sql
+--
+--  For local development:
+--    wrangler d1 execute YOUR_DB_NAME --local --file=schema.sql
 -- ════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS users (
@@ -132,19 +135,24 @@ CREATE INDEX IF NOT EXISTS idx_payment_receipts_status    ON payment_receipts(st
 --  Seed data
 -- ════════════════════════════════════════════════════════════
 
--- First plan (edit later from the admin panel)
+-- A sample plan so the shop is not empty on first launch.
+-- Edit, delete, or add plans later from the admin panel.
 INSERT OR IGNORE INTO plans (name, description, price, duration_days, is_unlimited)
-VALUES ('سرویس نامحدود یک‌ماهه', 'اینترنت نامحدود — شرایط عادی', 500000, 30, 1);
+VALUES ('Unlimited 1-Month', 'Unlimited traffic — standard conditions', 500000, 30, 1);
 
--- Settings.
---   ⚠️ REPLACE the placeholders below with YOUR values, OR set them
---      later from the admin panel (card_number / card_owner) and via
---      the command in the README (admin_ids).
+-- Runtime settings.
+--   ⚠️  REPLACE the placeholder values below with YOUR OWN values,
+--       OR leave them and set them later:
+--         • card_number / card_owner / channel_id → from the admin panel
+--         • admin_ids                             → see the command in the README
 --
---   admin_ids = JSON array of Telegram numeric IDs allowed into the admin panel.
---               Get your ID from @userinfobot on Telegram.
+--   card_number  = the card number shown to customers for card-to-card payment
+--   card_owner   = the card holder name shown next to the card number
+--   channel_id   = your public Telegram channel handle (e.g. @YourChannel)
+--   admin_ids    = JSON array of Telegram numeric IDs allowed into the admin panel.
+--                  Get your numeric ID from @userinfobot on Telegram.
 INSERT OR IGNORE INTO settings (key, value) VALUES
-  ('card_number', '0000-0000-0000-0000'),
-  ('card_owner',  'YOUR NAME'),
+  ('card_number', 'YOUR_CARD_NUMBER'),
+  ('card_owner',  'YOUR_CARD_OWNER_NAME'),
   ('channel_id',  '@YourChannel'),
-  ('admin_ids',   '["YOUR_TELEGRAM_ID"]');
+  ('admin_ids',   '["YOUR_ADMIN_TELEGRAM_ID"]');

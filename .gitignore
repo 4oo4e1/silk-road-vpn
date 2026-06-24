@@ -1,0 +1,34 @@
+# ── Secrets & local Cloudflare config ───────────────────────────
+# NEVER commit your real wrangler.toml — it contains resource IDs.
+wrangler.toml
+# Local secret/variable overrides used by `wrangler dev`
+.dev.vars
+.dev.vars.*
+
+# ── Wrangler / Cloudflare state ─────────────────────────────────
+.wrangler/
+.mf/
+dist/
+
+# ── Dependencies ────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Logs ────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── Environment files ───────────────────────────────────────────
+.env
+.env.*
+
+# ── Editor / OS noise ───────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

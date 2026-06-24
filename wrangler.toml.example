@@ -1,0 +1,49 @@
+# ════════════════════════════════════════════════════════════
+#  Silk Road VPN — Cloudflare Worker configuration (EXAMPLE)
+#
+#  1. Copy this file to `wrangler.toml`
+#  2. Replace every placeholder below with your real values
+#  3. NEVER commit your real wrangler.toml — it is git-ignored
+#
+#  Secrets (TELEGRAM_TOKEN, TELEGRAM_WEBHOOK_SECRET) are NOT stored
+#  here. Set them with `wrangler secret put <NAME>` (see README).
+# ════════════════════════════════════════════════════════════
+
+name = "silk-road-vpn"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+# ── Static assets (the Telegram Mini App frontend) ──────────────
+[assets]
+directory = "src/frontend"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+# Routes handled by the Worker itself (never served as static files):
+run_worker_first = ["/webhook", "/api/*", "/health"]
+
+# ── Plain (non-secret) environment variables ────────────────────
+[vars]
+# Public HTTPS URL of your deployed Worker / Mini App.
+# This is the URL Telegram opens when the user taps the shop button.
+# Example: https://silk-road-vpn.YOUR_SUBDOMAIN.workers.dev
+MINIAPP_URL = "https://YOUR_WORKER_URL"
+
+# ── D1 database binding ─────────────────────────────────────────
+# Create it with:  wrangler d1 create YOUR_DB_NAME
+# Then paste the returned database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "YOUR_DB_NAME"
+database_id = "YOUR_D1_DATABASE_ID"
+
+# ── KV namespace binding (cache + short-lived state) ────────────
+# Create it with:  wrangler kv namespace create KV
+# (and:            wrangler kv namespace create KV --preview)
+[[kv_namespaces]]
+binding = "KV"
+id = "YOUR_KV_NAMESPACE_ID"
+preview_id = "YOUR_KV_PREVIEW_ID"
+
+# ── Cron triggers (expire overdue subscriptions) ────────────────
+[triggers]
+crons = ["0 * * * *"]   # hourly — adjust to taste
